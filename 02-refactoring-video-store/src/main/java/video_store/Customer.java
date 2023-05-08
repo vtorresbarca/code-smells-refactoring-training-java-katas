@@ -31,12 +31,14 @@ public class Customer {
             Rental rental = (Rental) rentals.nextElement();
 
             thisAmount += rental.calculateAmount();
-            frequentRenterPoints++;
+
 
             if (rental.getPriceCode() == Movie.NEW_RELEASE
-                    && rental.getDaysRented() > 1)
-                frequentRenterPoints++;
-
+                    && rental.getDaysRented() > 1) {
+                frequentRenterPoints+=2;
+            }else {
+                frequentRenterPoints+=1;
+            }
 
             result += "\t" + rental.getTitle() + "\t"
                 + thisAmount + "\n";

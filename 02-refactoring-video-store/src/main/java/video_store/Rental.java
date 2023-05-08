@@ -30,4 +30,8 @@ public class Rental {
         return movie.calculateAmount(daysRented);
     }
 
+    public int calculateFrequentPoints() {
+        return movie.calculateFrequentPoints(daysRented);
+    }
+
 }

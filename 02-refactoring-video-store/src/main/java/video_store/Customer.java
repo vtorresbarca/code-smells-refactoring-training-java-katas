@@ -32,13 +32,7 @@ public class Customer {
 
             thisAmount += rental.calculateAmount();
 
-
-            if (rental.getPriceCode() == Movie.NEW_RELEASE
-                    && rental.getDaysRented() > 1) {
-                frequentRenterPoints+=2;
-            }else {
-                frequentRenterPoints+=1;
-            }
+            frequentRenterPoints += rental.calculateFrequentPoints();
 
             result += "\t" + rental.getTitle() + "\t"
                 + thisAmount + "\n";

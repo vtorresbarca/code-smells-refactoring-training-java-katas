@@ -31,7 +31,6 @@ public class Customer {
             Rental rental = (Rental) rentals.nextElement();
 
             thisAmount += rental.calculateAmount();
-
             frequentRenterPoints += rental.calculateFrequentPoints();
 
             result += "\t" + rental.getTitle() + "\t"

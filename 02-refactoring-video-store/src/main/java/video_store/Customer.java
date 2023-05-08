@@ -37,7 +37,6 @@ public class Customer {
             result += "\t" + rental.getTitle() + "\t"
                 + thisAmount + "\n";
             totalAmount += thisAmount;
-
         }
 
         result += "You owed " + totalAmount + "\n";

@@ -12,16 +12,15 @@ import java.util.List;
 
 public class BirthdayService {
 
-    private EmployeeRepository employeesRepository;
+    private EmployeeRepository employeesRepository; //usamos la interfaz y no la implementación para tener la dependencia del dominio y no de la infra
 
     public BirthdayService(EmployeeRepository employeesRepository) {
         this.employeesRepository = employeesRepository;
     }
 
-    public void sendGreetings(String fileName, OurDate ourDate,
+    public void sendGreetings(OurDate ourDate,
                               String smtpHost, int smtpPort) throws
             AddressException, MessagingException {
-        this.employeesRepository = new FileEmployeeRepository(fileName);
         List<Employee> employees = employeesRepository.getAllEmployees();
         List<Employee> birthdayEmployees = getEmployeesWhoseBirthdayIsOn(ourDate, employees);
 
@@ -39,7 +38,6 @@ public class BirthdayService {
         }
     }
 
-    //como esto no usa base de datos va en la parte de dominio
     private List<Employee> getEmployeesWhoseBirthdayIsOn(OurDate ourDate, List<Employee> employees) {
         List<Employee> birthdayEmployees = new ArrayList<>();
 
@@ -80,7 +78,7 @@ public class BirthdayService {
     public static void main(String[] args) {
         BirthdayService service = new BirthdayService(new FileEmployeeRepository("employee_data.txt"));
         try {
-            service.sendGreetings("employee_data.txt",
+            service.sendGreetings(
                     new OurDate("2008/10/08"), "localhost", 25);
         } catch (Exception e) {
             e.printStackTrace();

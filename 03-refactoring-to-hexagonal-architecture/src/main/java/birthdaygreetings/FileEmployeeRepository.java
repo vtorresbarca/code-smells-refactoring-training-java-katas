@@ -17,6 +17,7 @@ public class FileEmployeeRepository implements EmployeeRepository {
 
     @Override
     public List<Employee> getAllEmployees() {
+        //con el try catch conseguimos quitar las excepciones de la firma y hacemos un mapeo de excepciones de infra a excepciones de dominio
         try {
             BufferedReader in = new BufferedReader(new FileReader(fileName));
             List<Employee> employees = new ArrayList<>();

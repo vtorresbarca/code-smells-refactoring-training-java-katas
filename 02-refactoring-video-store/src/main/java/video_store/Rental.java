@@ -1,6 +1,10 @@
 package video_store;
 
 public class Rental {
+
+    private Movie movie;
+    private int daysRented;
+
     public Rental(Movie movie, int daysRented) {
         this.movie = movie;
         this.daysRented = daysRented;
@@ -14,6 +18,11 @@ public class Rental {
         return movie;
     }
 
-    private Movie movie;
-    private int daysRented;
+    public int getPriceCode() {
+        return movie.getPriceCode();
+    }
+
+    public String getTitle() {
+        return movie.getTitle();
+    }
 }

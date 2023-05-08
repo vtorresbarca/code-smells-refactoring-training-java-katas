@@ -20,6 +20,27 @@ public class BirthdayService {
     public void sendGreetings(String fileName, OurDate ourDate,
             String smtpHost, int smtpPort) throws IOException, ParseException,
             AddressException, MessagingException {
+        List<Employee> employees = getAllEmployees(fileName);
+        List<Employee> birthdayEmployees = new ArrayList<>();
+
+        for(Employee employee: employees) {
+            if (employee.isBirthday(ourDate)) {
+                birthdayEmployees.add(employee);
+            }
+        }
+
+        for(Employee employee: birthdayEmployees) {
+            String recipient = employee.getEmail();
+            String body = "Happy Birthday, dear %NAME%!".replace("%NAME%",
+                    employee.getFirstName());
+            String subject = "Happy Birthday!";
+            sendMessage(smtpHost, smtpPort, "sender@here.com", subject,
+                    body, recipient);
+        }
+    }
+
+    //este método se podría separar a la parte de infraestructura
+    private List<Employee> getAllEmployees(String fileName) throws IOException, ParseException {
         BufferedReader in = new BufferedReader(new FileReader(fileName));
         List<Employee> employees = new ArrayList<>();
         String str = "";
@@ -30,17 +51,7 @@ public class BirthdayService {
                     employeeData[2], employeeData[3]);
             employees.add(employee);
         }
-
-        for(Employee employee: employees) {
-            if (employee.isBirthday(ourDate)) {
-                String recipient = employee.getEmail();
-                String body = "Happy Birthday, dear %NAME%!".replace("%NAME%",
-                        employee.getFirstName());
-                String subject = "Happy Birthday!";
-                sendMessage(smtpHost, smtpPort, "sender@here.com", subject,
-                        body, recipient);
-            }
-        }
+        return employees;
     }
 
     private void sendMessage(String smtpHost, int smtpPort, String sender,

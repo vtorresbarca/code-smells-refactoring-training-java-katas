@@ -30,28 +30,7 @@ public class Customer {
             double thisAmount = 0;
             Rental rental = (Rental) rentals.nextElement();
 
-            // determines the amount for rental line
-            double amount = 0;
-            switch (rental.getPriceCode()) {
-                case Movie.REGULAR:
-                    amount = 2;
-                    if (rental.getDaysRented() > 2) {
-                        amount += (rental.getDaysRented() -2) * 1.5;
-                    }
-                    thisAmount = amount;
-                    break;
-                case Movie.NEW_RELEASE:
-                    amount = rental.getDaysRented() * 3;
-                    thisAmount = amount;
-                    break;
-                case Movie.CHILDRENS:
-                    amount = 1.5;
-                    if (rental.getDaysRented() > 3)
-                        amount += (rental.getDaysRented() - 3) * 1.5;
-                    thisAmount = amount;
-                    break;
-            }
-
+            thisAmount += rental.calculateAmount();
             frequentRenterPoints++;
 
             if (rental.getPriceCode() == Movie.NEW_RELEASE
@@ -70,4 +49,5 @@ public class Customer {
 
         return result;
     }
+
 }

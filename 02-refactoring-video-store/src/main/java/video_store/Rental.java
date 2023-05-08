@@ -25,4 +25,9 @@ public class Rental {
     public String getTitle() {
         return movie.getTitle();
     }
+
+    public double calculateAmount() {
+        return movie.calculateAmount(daysRented);
+    }
+
 }

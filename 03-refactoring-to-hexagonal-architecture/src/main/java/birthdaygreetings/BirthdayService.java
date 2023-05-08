@@ -21,14 +21,12 @@ public class BirthdayService {
             String smtpHost, int smtpPort) throws IOException, ParseException,
             AddressException, MessagingException {
         List<Employee> employees = getAllEmployees(fileName);
-        List<Employee> birthdayEmployees = new ArrayList<>();
+        List<Employee> birthdayEmployees = getEmployeesWhoseBirthdayIsOn(ourDate, employees);
 
-        for(Employee employee: employees) {
-            if (employee.isBirthday(ourDate)) {
-                birthdayEmployees.add(employee);
-            }
-        }
+        sendGreetingsTo(smtpHost, smtpPort, birthdayEmployees);
+    }
 
+    private void sendGreetingsTo(String smtpHost, int smtpPort, List<Employee> birthdayEmployees) throws MessagingException {
         for(Employee employee: birthdayEmployees) {
             String recipient = employee.getEmail();
             String body = "Happy Birthday, dear %NAME%!".replace("%NAME%",
@@ -37,6 +35,18 @@ public class BirthdayService {
             sendMessage(smtpHost, smtpPort, "sender@here.com", subject,
                     body, recipient);
         }
+    }
+
+    //como esto no usa base de datos va en la parte de dominio
+    private List<Employee> getEmployeesWhoseBirthdayIsOn(OurDate ourDate, List<Employee> employees) {
+        List<Employee> birthdayEmployees = new ArrayList<>();
+
+        for(Employee employee: employees) {
+            if (employee.isBirthday(ourDate)) {
+                birthdayEmployees.add(employee);
+            }
+        }
+        return birthdayEmployees;
     }
 
     //este método se podría separar a la parte de infraestructura

@@ -1,5 +1,6 @@
 package birthdaygreetings.infrastructure;
 
+import birthdaygreetings.core.CannotSendGreetingMessageException;
 import birthdaygreetings.core.GreetingMessage;
 
 import javax.mail.Message;
@@ -22,8 +23,13 @@ public class EmailGreetingsSender {
         this.sender = sender;
     }
 
+    //made protected for testing :-(
     protected void sendMessage(Message msg) throws MessagingException {
-        Transport.send(msg);
+        try {
+            Transport.send(msg);
+        } catch (MessagingException e) {
+            throw new CannotSendGreetingMessageException(e);
+        }
     }
 
     public void send(List<GreetingMessage> messages) throws MessagingException {

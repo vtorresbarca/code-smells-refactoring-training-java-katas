@@ -56,9 +56,7 @@ public class BirthdayServiceAcceptanceTest {
     @Test
     public void willNotSendEmailsWhenNobodysBirthday() throws Exception {
         OurDate today = ourDateFromString("2008/01/01");
-
         service.sendGreetings(today);
-
         assertEquals(0, messagesSent.size());
     }
 }

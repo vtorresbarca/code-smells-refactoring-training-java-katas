@@ -6,9 +6,7 @@ import birthdaygreetings.core.GreetingMessage;
 import birthdaygreetings.core.OurDate;
 import birthdaygreetings.infrastructure.EmailGreetingsSender;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Transport;
 import java.util.List;
 
 public class BirthdayService {
@@ -22,8 +20,7 @@ public class BirthdayService {
     }
 
     public void sendGreetings(OurDate date, String smtpHost, int smtpPort, String sender) throws MessagingException {
-
-        send(greetingMessagesFor(employeesHavingBirthday(date)),
+        emailGreetingsSender.send(greetingMessagesFor(employeesHavingBirthday(date)),
             smtpHost, smtpPort, sender);
     }
 
@@ -33,20 +30,6 @@ public class BirthdayService {
 
     private List<Employee> employeesHavingBirthday(OurDate today) {
         return employeesRepository.whoseBirthdayIs(today);
-    }
-
-    private void send(List<GreetingMessage> messages, String smtpHost, int smtpPort, String sender) throws MessagingException {
-        for (GreetingMessage message : messages) {
-            String recipient = message.to();
-            String body = message.text();
-            String subject = message.subject();
-            emailGreetingsSender.sendMessage(smtpHost, smtpPort, sender, subject, body, recipient);
-        }
-    }
-
-    // made protected for testing :-(
-    protected void sendMessage(Message msg) throws MessagingException {
-        Transport.send(msg);
     }
 
 }

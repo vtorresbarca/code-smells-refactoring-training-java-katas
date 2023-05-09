@@ -36,10 +36,6 @@ public class BirthdayServiceAcceptanceTest {
         };
 
         service = new BirthdayService(new FileEmployeesRepository(EMPLOYEES_FILE_PATH), emailGreetingsSender) {
-            @Override
-            protected void sendMessage(Message msg) throws MessagingException {
-                messagesSent.add(msg);
-            }
         };
     }
 

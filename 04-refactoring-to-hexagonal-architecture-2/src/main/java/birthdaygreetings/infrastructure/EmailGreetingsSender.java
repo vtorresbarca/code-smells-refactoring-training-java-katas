@@ -12,30 +12,8 @@ import java.util.List;
 
 public class EmailGreetingsSender {
 
-    // made protected for testing :-(
-    public void sendMessage(Message msg) throws MessagingException {
+    protected void sendMessage(Message msg) throws MessagingException {
         Transport.send(msg);
-    }
-
-    private void sendMessage(String smtpHost, int smtpPort, String sender,
-                            String subject, String body, String recipient)
-        throws MessagingException {
-        // Create a mail session
-        java.util.Properties props = new java.util.Properties();
-        props.put("mail.smtp.host", smtpHost);
-        props.put("mail.smtp.port", "" + smtpPort);
-        Session session = Session.getDefaultInstance(props, null);
-
-        // Construct the message
-        Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(sender));
-        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(
-            recipient));
-        msg.setSubject(subject);
-        msg.setText(body);
-
-        // Send the message
-        sendMessage(msg);
     }
 
     public void send(List<GreetingMessage> messages, String smtpHost, int smtpPort, String sender) throws MessagingException {
@@ -45,5 +23,31 @@ public class EmailGreetingsSender {
             String subject = message.subject();
             sendMessage(smtpHost, smtpPort, sender, subject, body, recipient);
         }
+    }
+
+    private void sendMessage(String smtpHost, int smtpPort, String sender,
+                            String subject, String body, String recipient)
+        throws MessagingException {
+        Session session = createMailSession(smtpHost, smtpPort);
+        Message msg = constructMessage(sender, subject, body, recipient, session);
+        // Send the message
+        sendMessage(msg);
+    }
+
+    private static Message constructMessage(String sender, String subject, String body, String recipient, Session session) throws MessagingException {
+        Message msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress(sender));
+        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(
+                recipient));
+        msg.setSubject(subject);
+        msg.setText(body);
+        return msg;
+    }
+
+    private static Session createMailSession(String smtpHost, int smtpPort) {
+        java.util.Properties props = new java.util.Properties();
+        props.put("mail.smtp.host", smtpHost);
+        props.put("mail.smtp.port", "" + smtpPort);
+        return Session.getDefaultInstance(props, null);
     }
 }

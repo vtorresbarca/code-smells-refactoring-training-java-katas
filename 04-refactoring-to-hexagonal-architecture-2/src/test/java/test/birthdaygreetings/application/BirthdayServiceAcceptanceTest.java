@@ -30,7 +30,7 @@ public class BirthdayServiceAcceptanceTest {
 
         EmailGreetingsSender emailGreetingsSender = new EmailGreetingsSender() {
             @Override
-            public void sendMessage(Message msg) throws MessagingException {
+            protected void sendMessage(Message msg) throws MessagingException {
                 messagesSent.add(msg);
             }
         };

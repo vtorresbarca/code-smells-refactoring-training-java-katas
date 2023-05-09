@@ -5,6 +5,8 @@ import birthdaygreetings.core.Employee;
 import birthdaygreetings.core.GreetingMessage;
 import org.junit.jupiter.api.Test;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +26,13 @@ class EmailGreetingsSenderTest {
         List<Employee> employees = Collections.singletonList(employee);
         List<GreetingMessage> greetingMessages = GreetingMessage.generateForSome(employees);
 
-        EmailGreetingsSender emailGreetingsSender = new EmailGreetingsSender(SMTP_HOST, SMTP_PORT, FROM);
+        EmailGreetingsSender emailGreetingsSender = new EmailGreetingsSender(SMTP_HOST, SMTP_PORT, FROM) {
+            @Override
+            protected void sendMessage(Message msg) throws MessagingException {
+                throw new MessagingException();
+            }
+        };
+
         assertThrows(CannotSendGreetingMessageException.class, () -> emailGreetingsSender.send(greetingMessages));
     }
 }

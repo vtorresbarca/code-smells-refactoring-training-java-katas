@@ -35,32 +35,31 @@ public class EmailGreetingsSender implements GreetingsSender {
             String recipient = message.to();
             String body = message.text();
             String subject = message.subject();
-            sendMessage(smtpHost, smtpPort, sender, subject, body, recipient);
+            sendMessage(subject, body, recipient, message);
         }
     }
 
-    private void sendMessage(String smtpHost, int smtpPort, String sender,
-                            String subject, String body, String recipient) {
-        Session session = createMailSession(smtpHost, smtpPort);
+    private void sendMessage(String subject, String body, String recipient, GreetingMessage message) {
+        Session session = createMailSession();
         try {
-            Message msg = constructMessage(sender, subject, body, recipient, session);
+            Message msg = constructMessage(subject, body, recipient, session, message);
             sendMessage(msg);
         } catch (MessagingException e) {
             throw new CannotSendGreetingMessageException(e);
         }
     }
 
-    private static Message constructMessage(String sender, String subject, String body, String recipient, Session session) throws MessagingException {
+    private Message constructMessage(String subject, String body, String recipient, Session session, GreetingMessage message) throws MessagingException {
         Message msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress(sender));
         msg.setRecipient(Message.RecipientType.TO, new InternetAddress(
-                recipient));
-        msg.setSubject(subject);
-        msg.setText(body);
+                message.to()));
+        msg.setSubject(message.subject());
+        msg.setText(message.text());
         return msg;
     }
 
-    private static Session createMailSession(String smtpHost, int smtpPort) {
+    private Session createMailSession() {
         java.util.Properties props = new java.util.Properties();
         props.put("mail.smtp.host", smtpHost);
         props.put("mail.smtp.port", "" + smtpPort);

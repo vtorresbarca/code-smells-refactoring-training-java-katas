@@ -12,6 +12,19 @@ import java.util.List;
 
 public class EmailGreetingsSender {
 
+    private String smtpHost;
+    private int smtpPort;
+    private String sender;
+
+    //constructor por defecto para que los tests lo usen y sigan en verde
+    public EmailGreetingsSender() {}
+
+    public EmailGreetingsSender(String smtpHost, int smtpPort, String sender) {
+        this.smtpHost = smtpHost;
+        this.smtpPort = smtpPort;
+        this.sender = sender;
+    }
+
     protected void sendMessage(Message msg) throws MessagingException {
         Transport.send(msg);
     }

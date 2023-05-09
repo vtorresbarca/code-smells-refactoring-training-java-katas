@@ -4,6 +4,7 @@ import birthdaygreetings.core.Employee;
 import birthdaygreetings.core.EmployeesRepository;
 import birthdaygreetings.core.GreetingMessage;
 import birthdaygreetings.core.OurDate;
+import birthdaygreetings.infrastructure.EmailGreetingsSender;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -16,6 +17,7 @@ import java.util.List;
 public class BirthdayService {
 
     private EmployeesRepository employeesRepository;
+    private EmailGreetingsSender emailGreetingsSender;
 
     public BirthdayService(EmployeesRepository employeesRepository) {
         this.employeesRepository = employeesRepository;

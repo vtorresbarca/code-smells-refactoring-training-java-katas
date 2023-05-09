@@ -32,24 +32,21 @@ public class EmailGreetingsSender implements GreetingsSender {
     @Override
     public void send(List<GreetingMessage> messages) {
         for (GreetingMessage message : messages) {
-            String recipient = message.to();
-            String body = message.text();
-            String subject = message.subject();
-            sendMessage(subject, body, recipient, message);
+            sendMessage(message);
         }
     }
 
-    private void sendMessage(String subject, String body, String recipient, GreetingMessage message) {
+    private void sendMessage(GreetingMessage message) {
         Session session = createMailSession();
         try {
-            Message msg = constructMessage(subject, body, recipient, session, message);
+            Message msg = constructMessage(session, message);
             sendMessage(msg);
         } catch (MessagingException e) {
             throw new CannotSendGreetingMessageException(e);
         }
     }
 
-    private Message constructMessage(String subject, String body, String recipient, Session session, GreetingMessage message) throws MessagingException {
+    private Message constructMessage(Session session, GreetingMessage message) throws MessagingException {
         Message msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress(sender));
         msg.setRecipient(Message.RecipientType.TO, new InternetAddress(

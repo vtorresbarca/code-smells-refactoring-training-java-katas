@@ -10,6 +10,9 @@ public class OurDate {
     private Date date;
 
     public OurDate(String yyyyMMdd) throws ParseException {
+        //esto debería estar fuera de la clase de dominio, habria que llevar este parse al repositorio
+        //porque a esta clase le debería llegar la fecha ya parseada. Esta responsabilidad debería ser del FileEmployeeRepository
+        //porque es el que se encarga del formato de fecha. Además que la ParseException es genérica y de infra
         date = new SimpleDateFormat("yyyy/MM/dd").parse(yyyyMMdd);
     }
 

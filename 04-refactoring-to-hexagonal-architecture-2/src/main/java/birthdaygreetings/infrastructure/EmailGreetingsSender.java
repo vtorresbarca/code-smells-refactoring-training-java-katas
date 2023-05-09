@@ -25,11 +25,7 @@ public class EmailGreetingsSender {
 
     //made protected for testing :-(
     protected void sendMessage(Message msg) throws MessagingException {
-        try {
-            Transport.send(msg);
-        } catch (MessagingException e) {
-            throw new CannotSendGreetingMessageException(e);
-        }
+        Transport.send(msg);
     }
 
     public void send(List<GreetingMessage> messages) throws MessagingException {
@@ -46,8 +42,11 @@ public class EmailGreetingsSender {
         throws MessagingException {
         Session session = createMailSession(smtpHost, smtpPort);
         Message msg = constructMessage(sender, subject, body, recipient, session);
-        // Send the message
-        sendMessage(msg);
+        try {
+            sendMessage(msg);
+        } catch (MessagingException e) {
+            throw new CannotSendGreetingMessageException(e);
+        }
     }
 
     private static Message constructMessage(String sender, String subject, String body, String recipient, Session session) throws MessagingException {

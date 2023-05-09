@@ -3,6 +3,7 @@ package birthdaygreetings.infrastructure;
 import birthdaygreetings.core.CannotSendGreetingMessageException;
 import birthdaygreetings.core.Employee;
 import birthdaygreetings.core.GreetingMessage;
+import birthdaygreetings.core.GreetingsSender;
 import org.junit.jupiter.api.Test;
 
 import javax.mail.Message;
@@ -26,14 +27,14 @@ class EmailGreetingsSenderTest {
         List<Employee> employees = Collections.singletonList(employee);
         List<GreetingMessage> greetingMessages = GreetingMessage.generateForSome(employees);
 
-        EmailGreetingsSender emailGreetingsSender = new EmailGreetingsSender(SMTP_HOST, SMTP_PORT, FROM) {
+        GreetingsSender greetingsSender = new EmailGreetingsSender(SMTP_HOST, SMTP_PORT, FROM) {
             @Override
             protected void sendMessage(Message msg) throws MessagingException {
                 throw new MessagingException();
             }
         };
 
-        assertThrows(CannotSendGreetingMessageException.class, () -> emailGreetingsSender.send(greetingMessages));
+        assertThrows(CannotSendGreetingMessageException.class, () -> greetingsSender.send(greetingMessages));
     }
 
     @Test
@@ -42,13 +43,13 @@ class EmailGreetingsSenderTest {
         List<Employee> employees = Collections.singletonList(employee);
         List<GreetingMessage> greetingMessages = GreetingMessage.generateForSome(employees);
 
-        EmailGreetingsSender emailGreetingsSender = new EmailGreetingsSender(SMTP_HOST, SMTP_PORT, "") {
+        GreetingsSender greetingsSender = new EmailGreetingsSender(SMTP_HOST, SMTP_PORT, "") {
             @Override
-            protected void sendMessage(Message msg) throws MessagingException {
+            protected void sendMessage(Message msg) {
 
             }
         };
 
-        assertThrows(CannotSendGreetingMessageException.class, () -> emailGreetingsSender.send(greetingMessages));
+        assertThrows(CannotSendGreetingMessageException.class, () -> greetingsSender.send(greetingMessages));
     }
 }

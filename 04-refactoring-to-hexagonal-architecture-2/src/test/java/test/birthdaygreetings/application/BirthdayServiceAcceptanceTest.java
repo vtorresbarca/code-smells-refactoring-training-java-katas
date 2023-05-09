@@ -1,6 +1,7 @@
 package test.birthdaygreetings.application;
 
 import birthdaygreetings.application.BirthdayService;
+import birthdaygreetings.core.GreetingsSender;
 import birthdaygreetings.core.OurDate;
 import birthdaygreetings.infrastructure.EmailGreetingsSender;
 import birthdaygreetings.infrastructure.repositories.FileEmployeesRepository;
@@ -28,14 +29,14 @@ public class BirthdayServiceAcceptanceTest {
     public void setUp() throws Exception {
         messagesSent = new ArrayList<>();
 
-        EmailGreetingsSender emailGreetingsSender = new EmailGreetingsSender(SMTP_HOST, SMTP_PORT, FROM) {
+        GreetingsSender greetingsSender = new EmailGreetingsSender(SMTP_HOST, SMTP_PORT, FROM) {
             @Override
             protected void sendMessage(Message msg) throws MessagingException {
                 messagesSent.add(msg);
             }
         };
 
-        service = new BirthdayService(new FileEmployeesRepository(EMPLOYEES_FILE_PATH), emailGreetingsSender) {
+        service = new BirthdayService(new FileEmployeesRepository(EMPLOYEES_FILE_PATH), greetingsSender) {
         };
     }
 

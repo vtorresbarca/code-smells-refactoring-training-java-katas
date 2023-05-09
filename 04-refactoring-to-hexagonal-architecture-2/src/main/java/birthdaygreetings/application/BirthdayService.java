@@ -1,10 +1,6 @@
 package birthdaygreetings.application;
 
-import birthdaygreetings.core.Employee;
-import birthdaygreetings.core.EmployeesRepository;
-import birthdaygreetings.core.GreetingMessage;
-import birthdaygreetings.core.OurDate;
-import birthdaygreetings.infrastructure.EmailGreetingsSender;
+import birthdaygreetings.core.*;
 
 import javax.mail.MessagingException;
 import java.util.List;
@@ -12,15 +8,15 @@ import java.util.List;
 public class BirthdayService {
 
     private EmployeesRepository employeesRepository;
-    private EmailGreetingsSender emailGreetingsSender;
+    private GreetingsSender greetingsSender;
 
-    public BirthdayService(EmployeesRepository employeesRepository, EmailGreetingsSender emailGreetingsSender) {
+    public BirthdayService(EmployeesRepository employeesRepository, GreetingsSender greetingsSender) {
         this.employeesRepository = employeesRepository;
-        this.emailGreetingsSender = emailGreetingsSender;
+        this.greetingsSender = greetingsSender;
     }
 
-    public void sendGreetings(OurDate date) throws MessagingException {
-        emailGreetingsSender.send(greetingMessagesFor(employeesHavingBirthday(date)));
+    public void sendGreetings(OurDate date) {
+        greetingsSender.send(greetingMessagesFor(employeesHavingBirthday(date)));
     }
 
     private List<GreetingMessage> greetingMessagesFor(List<Employee> employees) {

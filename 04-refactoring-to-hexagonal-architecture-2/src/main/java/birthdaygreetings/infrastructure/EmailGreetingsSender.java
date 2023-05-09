@@ -28,7 +28,7 @@ public class EmailGreetingsSender {
         Transport.send(msg);
     }
 
-    public void send(List<GreetingMessage> messages) throws MessagingException {
+    public void send(List<GreetingMessage> messages) {
         for (GreetingMessage message : messages) {
             String recipient = message.to();
             String body = message.text();
@@ -38,11 +38,10 @@ public class EmailGreetingsSender {
     }
 
     private void sendMessage(String smtpHost, int smtpPort, String sender,
-                            String subject, String body, String recipient)
-        throws MessagingException {
+                            String subject, String body, String recipient) {
         Session session = createMailSession(smtpHost, smtpPort);
-        Message msg = constructMessage(sender, subject, body, recipient, session);
         try {
+            Message msg = constructMessage(sender, subject, body, recipient, session);
             sendMessage(msg);
         } catch (MessagingException e) {
             throw new CannotSendGreetingMessageException(e);

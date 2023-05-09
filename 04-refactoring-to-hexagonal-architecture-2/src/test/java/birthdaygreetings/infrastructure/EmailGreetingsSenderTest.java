@@ -35,4 +35,20 @@ class EmailGreetingsSenderTest {
 
         assertThrows(CannotSendGreetingMessageException.class, () -> emailGreetingsSender.send(greetingMessages));
     }
+
+    @Test
+    public void when_constructMessage_message_failed_then_throws_CannotSendGreetingMessageException() throws ParseException {
+        Employee employee = new Employee("foo", "bar", ourDateFromString("1990/01/31"), "a@b.c");
+        List<Employee> employees = Collections.singletonList(employee);
+        List<GreetingMessage> greetingMessages = GreetingMessage.generateForSome(employees);
+
+        EmailGreetingsSender emailGreetingsSender = new EmailGreetingsSender(SMTP_HOST, SMTP_PORT, "") {
+            @Override
+            protected void sendMessage(Message msg) throws MessagingException {
+
+            }
+        };
+
+        assertThrows(CannotSendGreetingMessageException.class, () -> emailGreetingsSender.send(greetingMessages));
+    }
 }

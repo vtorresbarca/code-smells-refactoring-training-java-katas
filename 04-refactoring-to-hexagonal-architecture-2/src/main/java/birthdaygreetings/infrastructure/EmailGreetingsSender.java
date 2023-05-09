@@ -16,9 +16,6 @@ public class EmailGreetingsSender {
     private int smtpPort;
     private String sender;
 
-    //constructor por defecto para que los tests lo usen y sigan en verde
-    public EmailGreetingsSender() {}
-
     public EmailGreetingsSender(String smtpHost, int smtpPort, String sender) {
         this.smtpHost = smtpHost;
         this.smtpPort = smtpPort;
@@ -29,7 +26,7 @@ public class EmailGreetingsSender {
         Transport.send(msg);
     }
 
-    public void send(List<GreetingMessage> messages, String smtpHost, int smtpPort, String sender) throws MessagingException {
+    public void send(List<GreetingMessage> messages) throws MessagingException {
         for (GreetingMessage message : messages) {
             String recipient = message.to();
             String body = message.text();

@@ -1,5 +1,7 @@
 package birthdaygreetings.core;
 
+import java.util.Objects;
+
 class Greeting {
     private final String header;
     private final String content;
@@ -21,5 +23,18 @@ class Greeting {
 
     String content() {
         return content;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Greeting greeting = (Greeting) o;
+        return Objects.equals(header, greeting.header) && Objects.equals(content, greeting.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(header, content);
     }
 }

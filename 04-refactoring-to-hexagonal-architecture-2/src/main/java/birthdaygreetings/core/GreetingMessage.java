@@ -1,6 +1,7 @@
 package birthdaygreetings.core;
 
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,5 +35,18 @@ public class GreetingMessage {
 
     public String to() {
         return this.to;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GreetingMessage that = (GreetingMessage) o;
+        return Objects.equals(to, that.to) && Objects.equals(greeting, that.greeting);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(to, greeting);
     }
 }

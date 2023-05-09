@@ -8,10 +8,7 @@ import birthdaygreetings.infrastructure.EmailGreetingsSender;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 public class BirthdayService {
@@ -19,8 +16,9 @@ public class BirthdayService {
     private EmployeesRepository employeesRepository;
     private EmailGreetingsSender emailGreetingsSender;
 
-    public BirthdayService(EmployeesRepository employeesRepository) {
+    public BirthdayService(EmployeesRepository employeesRepository, EmailGreetingsSender emailGreetingsSender) {
         this.employeesRepository = employeesRepository;
+        this.emailGreetingsSender = emailGreetingsSender;
     }
 
     public void sendGreetings(OurDate date, String smtpHost, int smtpPort, String sender) throws MessagingException {
@@ -42,29 +40,8 @@ public class BirthdayService {
             String recipient = message.to();
             String body = message.text();
             String subject = message.subject();
-            sendMessage(smtpHost, smtpPort, sender, subject, body, recipient);
+            emailGreetingsSender.sendMessage(smtpHost, smtpPort, sender, subject, body, recipient);
         }
-    }
-
-    private void sendMessage(String smtpHost, int smtpPort, String sender,
-                             String subject, String body, String recipient)
-        throws MessagingException {
-        // Create a mail session
-        java.util.Properties props = new java.util.Properties();
-        props.put("mail.smtp.host", smtpHost);
-        props.put("mail.smtp.port", "" + smtpPort);
-        Session session = Session.getDefaultInstance(props, null);
-
-        // Construct the message
-        Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(sender));
-        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(
-            recipient));
-        msg.setSubject(subject);
-        msg.setText(body);
-
-        // Send the message
-        sendMessage(msg);
     }
 
     // made protected for testing :-(

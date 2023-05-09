@@ -2,6 +2,7 @@ package test.birthdaygreetings.application;
 
 import birthdaygreetings.application.BirthdayService;
 import birthdaygreetings.core.OurDate;
+import birthdaygreetings.infrastructure.EmailGreetingsSender;
 import birthdaygreetings.infrastructure.repositories.FileEmployeesRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,14 @@ public class BirthdayServiceAcceptanceTest {
     public void setUp() throws Exception {
         messagesSent = new ArrayList<>();
 
-        service = new BirthdayService(new FileEmployeesRepository(EMPLOYEES_FILE_PATH)) {
+        EmailGreetingsSender emailGreetingsSender = new EmailGreetingsSender() {
+            @Override
+            public void sendMessage(Message msg) throws MessagingException {
+                messagesSent.add(msg);
+            }
+        };
+
+        service = new BirthdayService(new FileEmployeesRepository(EMPLOYEES_FILE_PATH), emailGreetingsSender) {
             @Override
             protected void sendMessage(Message msg) throws MessagingException {
                 messagesSent.add(msg);
